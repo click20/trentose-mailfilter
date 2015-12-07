@@ -7,11 +7,11 @@ var MailModel = {
    * Initialises the model with the "database" of filter rules
    * and messages. This function is already implemented.
    */
-    /*
+    
    init : function(){
      this.rules = rules;
      this.messages = msgs;
-   }, */
+   }, 
     
     collection0: rules,
     collection1: msgs,
@@ -21,12 +21,12 @@ var MailModel = {
     */
     filter : function(){
         
-        for(var x=0; x< msgs.length; x++){
-             if( (msgs[x].indexOf(rules[0]) > -1) || (msgs[x].indexOf(rules[1]) > -1 ) ){
-                delete msgs[x]; 
-                console.log(msgs);
-                
-            }     
+        for(var x=0; x< this.collection1.length; x++){
+             if(this.collection1[x] == undefined){ continue; }
+             if( (this.collection1[x].indexOf(this.collection0[0]) > -1) || (this.collection1[x].indexOf(this.collection0[1]) > -1 )){
+                delete this.collection1[x];   
+            }
+            
         }   
         return msgs;       
     },
@@ -34,9 +34,9 @@ var MailModel = {
     filterArrayCorrect: function(){
         
         var msgsCorrect = [];
-        for(var l=0; l<msgs.length; l++){
-            if( msgs[l] != undefined ){
-                msgsCorrect.push(msgs[l]);
+        for(var l=0; l<this.collection1.length; l++){
+            if( this.collection1[l] != undefined ){
+                msgsCorrect.push(this.collection1[l]);
             }else{
                 continue;
             }
@@ -56,7 +56,6 @@ var MailModel = {
 // you can add here your views and controllers if you decide to do so.
 
 var tmpl= "<li> TEST </li>"; 
-var tmpl1= "<li> TEST </li>"; 
 
 var view = {
     
@@ -68,12 +67,16 @@ var view = {
     
     filterView: function(){
             for(var i=0; i< controller.getLenghtFilterMsgs(); i++){
-            $(".result").append(tmpl1.replace("TEST",controller.getMsgsFiltered(i)) ); 
+            $(".result").append(tmpl.replace("TEST",controller.getMsgsFiltered(i)) ); 
         }   
     }
 };
 
 var controller = {
+    
+    getInit: function(){
+        return MailModel.init();
+    },
     
     getRules: function(position){
         return MailModel.collection0[position];
@@ -113,12 +116,14 @@ var controller = {
          
             
 $(document).ready(function(){
-       
+     
+    controller.getInit();
     controller.getViewInit();
-    controller.getModelFilter(); 
     
     $(".btn-filter").click(function(){
+        $(".btn-filter").attr("disabled","disabled");
         $(".result").html("");
+        controller.getModelFilter(); 
         controller.getFilterView();
     });
      
