@@ -21,15 +21,21 @@ var MailModel = {
     */
     filter : function(){
         
-        var ind= 0;
         
-        for(var x=0; x< this.collection1.length; x++){
-           if(this.collection1[x] == undefined){ continue; }
-           if( (this.collection1[x].from.indexOf(this.collection0[ind].from) > -1) || (this.collection1[x].subject.indexOf(this.collection0[ind].subject) > -1 )){
-                delete this.collection1[x];   
-                ind++;
+        for(var x=0; x< this.collection0.length; x++){
+            
+            if(this.collection0[x] == undefined){ continue; }
+            
+          for(var t=0; t<this.collection1.length; t++){
+              
+           if(this.collection1[t] == undefined){ continue; }
+           if( (this.collection1[t].from.indexOf(this.collection0[x].from) > -1) || (this.collection1[t].subject.indexOf(this.collection0[x].subject) > -1 )){
+                delete this.collection1[t];   
+                
             }
-           if(ind== this.collection0.length){ind = 0;}           
+            
+          }
+            
         } 
         
         return msgs;       
