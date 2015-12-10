@@ -38,7 +38,7 @@ var MailModel = {
             
         } 
         
-        return msgs;       
+        return this.collection1;       
     },
     
     filterArrayCorrect: function(){
@@ -72,15 +72,15 @@ var tmpl= "<li> <strong> FROM </strong> </li> <p> SUBJECT </p>";
 
 var view = {
     
-    layout: function(){
-        for(var i=0; i< controller.getLenghtMsgs(); i++){
-            $(".result").append(tmpl.replace("FROM",controller.getMsgsFROM(i)).replace("SUBJECT",controller.getMsgsSUB(i)) ); 
+    layout: function( arrayMsgs ){
+        for(var i=0; i< arrayMsgs.length; i++){
+            $(".result").append(tmpl.replace("FROM",arrayMsgs[i].from).replace("SUBJECT",arrayMsgs[i].subject) ); 
         }
     },
     
-    filterView: function(){
-            for(var i=0; i< controller.getLenghtFilterMsgs(); i++){
-            $(".result").append(tmpl.replace("FROM",controller.getMsgsFilteredFROM(i)).replace("SUBJECT",controller.getMsgsFilteredSUB(i)) ); 
+    filterView: function( arrayCorrect ){
+            for(var i=0; i< arrayCorrect.length; i++){
+            $(".result").append(tmpl.replace("FROM",arrayCorrect[i].from).replace("SUBJECT",arrayCorrect[i].subject) ); 
         }   
     }
 };
@@ -90,49 +90,23 @@ var controller = {
     getInit: function(){
         return MailModel.init();
     },
-    
-    getRules: function(position){
-        return MailModel.collection0[position];
-    },
-    
-    getMsgsFROM: function(position){
-        return MailModel.collection1[position].from;
-    },
-    
-    getMsgsSUB: function(position){
-        return MailModel.collection1[position].subject;
-    },
-    
-    getLenghtMsgs: function(){
-        return MailModel.collection1.length;
-    },
-    
-    getViewInit: function(){
-        return view.layout();
+      
+    getViewInit: function( arrayMsgs ){
+        return view.layout( arrayMsgs );
     },
     
     getModelFilter: function(){
         return MailModel.filter();
     },
     
-    getFilterView: function(){
-        return view.filterView();
+    getFilterView: function( arrayCorrect ){
+        return view.filterView( arrayCorrect );
     },
     
-    getMsgsFilteredFROM: function(position){
-        var filterCORRECT= MailModel.filterArrayCorrect();
-        return filterCORRECT[position].from;
+    getModelFilterCorrect: function(){
+        return MailModel.filterArrayCorrect();
     },
     
-    getMsgsFilteredSUB: function(position){
-        var filterCORRECT= MailModel.filterArrayCorrect();
-        return filterCORRECT[position].subject;
-    },
-    
-    getLenghtFilterMsgs: function(){
-        var LENGHTmsgs= MailModel.filterArrayCorrect();
-        return LENGHTmsgs.length;
-    }
     
 };
          
@@ -140,13 +114,13 @@ var controller = {
 $(document).ready(function(){
      
     controller.getInit();
-    controller.getViewInit();
+    controller.getViewInit( msgs );
     
     $(".btn-filter").click(function(){
         $(".btn-filter").attr("disabled","disabled");
         $(".result").html("");
         controller.getModelFilter(); 
-        controller.getFilterView();
+        controller.getFilterView( controller.getModelFilterCorrect() );
     });
      
 });
