@@ -30,7 +30,7 @@ var MailModel = {
               
            if(this.collection1[t] == undefined){ continue; }
            if( (this.collection1[t].from.indexOf(this.collection0[x].from) > -1) || (this.collection1[t].subject.indexOf(this.collection0[x].subject) > -1 )){
-                delete this.collection1[t];   
+                this.collection1.splice(t,1);   //elimino 1 solo elemento nella posizione t, posso aggiungere elemento splice(t,0,"ciao")
                 
             }
             
@@ -39,24 +39,24 @@ var MailModel = {
         } 
         
         return this.collection1;       
-    },
-    
-    filterArrayCorrect: function(){
-        
-        var msgsCorrect = [];
-        for(var l=0; l<this.collection1.length; l++){
-            if( this.collection1[l] != undefined ){
-                msgsCorrect.push({
-                                    from: this.collection1[l].from,
-                                    subject: this.collection1[l].subject             
-                                 });
-            }else{
-                continue;
-            }
-        }
-        return msgsCorrect;
     }
- 
+    
+//    filterArrayCorrect: function(){
+//        
+//        var msgsCorrect = [];
+//        for(var l=0; l<this.collection1.length; l++){
+//            if( this.collection1[l] != undefined ){
+//                msgsCorrect.push({
+//                                    from: this.collection1[l].from,
+//                                    subject: this.collection1[l].subject             
+//                                 });
+//            }else{
+//                continue;
+//            }
+//        }
+//        return msgsCorrect;
+//    }
+// 
 };
 
 // Example of usage:
@@ -101,13 +101,13 @@ var controller = {
     
     getFilterView: function( arrayCorrect ){
         return view.filterView( arrayCorrect );
-    },
+    }
     
-    getModelFilterCorrect: function(){
-        return MailModel.filterArrayCorrect();
-    },
-    
-    
+//    getModelFilterCorrect: function(){
+//        return MailModel.filterArrayCorrect();
+//    },
+//    
+//    
 };
          
             
@@ -119,8 +119,8 @@ $(document).ready(function(){
     $(".btn-filter").click(function(){
         $(".btn-filter").attr("disabled","disabled");
         $(".result").html("");
-        controller.getModelFilter(); 
-        controller.getFilterView( controller.getModelFilterCorrect() );
+//        controller.getModelFilter(); 
+        controller.getFilterView( controller.getModelFilter() );
     });
      
 });
